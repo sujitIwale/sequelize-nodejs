@@ -1,0 +1,73 @@
+#### Installing dependencies ####
+    Install mysql2 -- npm i mysql2
+    Install sequelize -- npm i sequelize
+    Install sequelize-cli -- npm i -g sequelize-cli
+
+#### Initializing sequelize ####
+    -- sequelize init
+
+#### Creating Database using Sequelize ####
+    -- sequelize db:create
+
+#### Making connection ####
+    const { Sequelize } = require('sequelize');
+
+    const sequelize = new Sequelize('basic', 'root', 'password', {
+        host: 'localhost',
+        dialect: 'mysql'
+    });
+
+#### Creating Model #### 
+    const Sequelize = require('sequelize');
+    const sequelize = require('../db/connection');
+
+    // It will create Users table and add columns like id,name
+    // columns contains attributes
+    module.exports = sequelize.define("User",{
+        id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+        },
+        name: {
+        type: Sequelize.STRING,
+        allowNull:false
+        },
+        email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique:true
+        },
+        roleId: {
+        type: Sequelize.INTEGER,
+        references: {     // Foreign key
+            model:'Role', // table name
+            key:'id'      // column name
+        }
+        },
+        createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+        },
+        updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+        }
+    },{tableName:"Users"})
+
+
+#### Creating Migration ####
+    // that helps to create table inside of a Database
+
+    cmd: npx sequelize-cli migration:create --name create-post-table
+    // add model to migrated file in migration folder
+
+#### Migrating table ####
+    // that creates table in db
+    cmd : npx sequelize-cli db:migrate
+
+#### Un doing (cancelling) previous Migration ####
+    cmd: npx sequelize-cli db:migrate:undo
+    // for all previon migration
+    cmd: npx sequelize-cli db:migrate:undo:all
